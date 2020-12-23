@@ -1,4 +1,5 @@
 const { app, BrowserWindow, shell } = require('electron');
+const { parse } = require('ts-node');
 const URL = require('url');
 
 const singleInstance = app.requestSingleInstanceLock();
@@ -15,6 +16,7 @@ app.on('second-instance', (event, args) => {
         win.focus();
     }
 
+    //TODO: Refactor
     if (args.length > 1) {
         console.log(args.toString());
         win.webContents.send('signin-oidc', args[2]);
@@ -43,12 +45,17 @@ app.whenReady().then(() => {
 });
 
 app.on('open-url', (event, url) => {
+    //TODO: Refactor
     const parsedUrl = URL.parse(url);
-    
-    
+
+    console.log('[OPEN-URL] ', parsedUrl.hostname);
+
     if (parsedUrl.hostname === 'signin-oidc') {
-        console.log('[OPEN-URL] ', parsedUrl.hostname);
         win.webContents.send('signin-oidc', { url });
+    }
+
+    if (parsedUrl.hostname === 'signout-callback-oidc') {
+        win.webContents.send('signout-callback-oidc', { url });
     }
 });
 

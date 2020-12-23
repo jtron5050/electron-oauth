@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { User } from 'oidc-client';
 import { Observable } from 'rxjs';
 import { appStarted } from './store/actions';
 
 import * as fromAuth from './authentication/store';
+import { signout } from './authentication/store';
 
 @Component({
     selector: 'app-root',
@@ -21,7 +21,10 @@ import * as fromAuth from './authentication/store';
         <p>Authenticated: {{isAuthenticated$ | async}}</p>
         <p>{{userData$ | async | json}}</p>
     </div>
-    <div><a routerLink="home">Home</a> | <a routerLink="signin">Signin</a></div>
+    <div>
+        <a routerLink="home">Home</a> 
+        <ng-container *ngIf="!(isAuthenticated$ | async)">| <a routerLink="signin">Signin</a></ng-container>
+    </div>
 
     <router-outlet></router-outlet>
     `,
@@ -40,5 +43,10 @@ export class AppComponent {
         this.isAuthenticated$ = this.store.pipe(select(fromAuth.selectIsAuthenticated));
         this.userData$ = this.store.pipe(select(fromAuth.selectProfile));
         this.store.dispatch(appStarted());
+    }
+
+    signout() {
+        
+        this.store.dispatch(signout())
     }
 }

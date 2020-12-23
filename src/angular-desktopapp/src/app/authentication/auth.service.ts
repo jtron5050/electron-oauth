@@ -15,7 +15,7 @@ export class AuthService {
         private ngZone: NgZone,
         private oidc: OidcSecurityService
     ) {
-        
+
     }
 
     get token() {
@@ -41,6 +41,21 @@ export class AuthService {
                         subscriber.next(isAuthorized);
                         subscriber.complete();
                     });
+                });
+            });
+        });
+    }
+
+    signout(): Observable<boolean> {
+        return new Observable<boolean>((subscriber) => {
+            const urlHandler = (url: string) => this.electron.shell.openExternal(url);
+
+            this.oidc.logoff(urlHandler);
+
+            this.electron.ipcRenderer.once('signout-callback-oidc', (event, args) => {
+                this.ngZone.run(() => {
+                    subscriber.next(true);
+                    subscriber.complete();
                 });
             });
         });

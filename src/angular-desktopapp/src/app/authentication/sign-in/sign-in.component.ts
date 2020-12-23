@@ -6,7 +6,7 @@ import { AuthOptions } from 'angular-auth-oidc-client/lib/login/auth-options';
 import { ElectronService } from 'ngx-electron';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { signin } from '../store';
+import { signin, signout } from '../store';
 
 @Component({
     selector: 'app-sign-in',
@@ -15,7 +15,8 @@ import { signin } from '../store';
       sign-in works!
     </p>
 
-    <button (click)="login()">login</button>
+    <button (click)="signin()">Sign In</button>
+    | <button (click)="signout()">Sign Out</button>
   `,
     styles: [
     ]
@@ -27,7 +28,11 @@ export class SignInComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    login() {
+    signin() {
         this.store.dispatch(signin());
+    }
+
+    signout() {
+        this.store.dispatch(signout());
     }
 }

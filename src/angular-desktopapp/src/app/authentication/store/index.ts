@@ -5,6 +5,9 @@ export const checkAuthComplete = createAction('[Auth] checkAuth complete', props
 export const signinComplete = createAction('[Auth] signin complete', props<{ profile: any }>());
 export const signinFailed = createAction('[Auth] signin failed');
 
+export const signout = createAction('[Auth] signout');
+export const signoutComplete = createAction('[Auth] signout complete');
+
 export interface User {
     id: string;
     login: string;
@@ -25,7 +28,8 @@ const initialState: State = {
 
 export const reducer = createReducer(initialState,
     on(signin, (state) => ({ ...state, isAuthenticating: true })),
-    on(signinComplete, (state, { profile }) => ({ ...state, isAuthenticated: true, isAuthenticating: false, profile: profile }))
+    on(signinComplete, (state, { profile }) => ({ ...state, isAuthenticated: true, isAuthenticating: false, profile: profile })),
+    on(signoutComplete, (state) => ({ ...state, profile: null, isAuthenticated: false }))
 );
 
 const selectAuthFeature = createFeatureSelector<State>('auth');

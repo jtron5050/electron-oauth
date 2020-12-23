@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { createAction } from "@ngrx/store";
 import { of } from "rxjs";
-import { map, switchMap } from 'rxjs/operators';
-import { checkAuthComplete, signin, signinComplete, signinFailed } from ".";
+import { map, switchMap, take, tap } from 'rxjs/operators';
+import { checkAuthComplete, signin, signinComplete, signinFailed, signout, signoutComplete } from ".";
 
 import { AuthService } from "../auth.service";
 
@@ -26,7 +27,10 @@ export class AuthEffects {
             ofType(checkAuthComplete),
             switchMap((isAuthenticated) => {
                 if (isAuthenticated) {
-                    return this.authService.userData$.pipe(map((profile) => signinComplete({ profile })))
+                    return this.authService.userData$.pipe(
+                        take(1), 
+                        map((profile) => signinComplete({ profile }))
+                    )
                 }
                 else {
                     return of(signinFailed());
@@ -34,4 +38,15 @@ export class AuthEffects {
             })
         )
     );
+
+    signout$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(signout),
+            switchMap(() => 
+                this.authService.signout().pipe(
+                    map(() => signoutComplete())
+                )
+            )
+        )
+    )
 }

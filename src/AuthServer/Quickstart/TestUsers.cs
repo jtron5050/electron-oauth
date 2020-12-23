@@ -47,7 +47,7 @@ namespace IdentityServerHost.Quickstart.UI
                     {
                         SubjectId = "88421113",
                         Username = "bob",
-                        Password = "bob",
+                        Password = "bob-12#$",
                         Claims =
                         {
                             new Claim(JwtClaimTypes.Name, "Bob Smith"),
