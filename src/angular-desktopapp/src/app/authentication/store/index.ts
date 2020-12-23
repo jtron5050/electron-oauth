@@ -1,7 +1,9 @@
 import { createAction, createFeatureSelector, createReducer, createSelector, on, props } from "@ngrx/store";
 
-export const signin = createAction('[Auth] begin signin');
-export const signinSucceeded = createAction('[Auth] signin succeeded', props<{ user: any }>());
+export const signin = createAction('[Auth] signin');
+export const checkAuthComplete = createAction('[Auth] checkAuth complete', props<{ isAuthenticated: boolean }>());
+export const signinComplete = createAction('[Auth] signin complete', props<{ profile: any }>());
+export const signinFailed = createAction('[Auth] signin failed');
 
 export interface User {
     id: string;
@@ -12,21 +14,21 @@ export interface User {
 export interface State {
     isAuthenticating: boolean;
     isAuthenticated: boolean;
-    currentUser: User;
+    profile: User;
 }
 
 const initialState: State = {
     isAuthenticating: false,
     isAuthenticated: false,
-    currentUser: null
+    profile: null
 };
 
 export const reducer = createReducer(initialState,
     on(signin, (state) => ({ ...state, isAuthenticating: true })),
-    on(signinSucceeded, (state, { user }) => ({ ...state, isAuthenticated: true, isAuthenticating: false, currentUser: user }))
+    on(signinComplete, (state, { profile }) => ({ ...state, isAuthenticated: true, isAuthenticating: false, profile: profile }))
 );
 
 const selectAuthFeature = createFeatureSelector<State>('auth');
 export const selectIsAuthenticating = createSelector(selectAuthFeature, auth => auth.isAuthenticating);
 export const selectIsAuthenticated = createSelector(selectAuthFeature, auth => auth.isAuthenticated);
-export const selectCurrentUser = createSelector(selectAuthFeature, auth => auth.currentUser);
+export const selectProfile = createSelector(selectAuthFeature, auth => auth.profile);

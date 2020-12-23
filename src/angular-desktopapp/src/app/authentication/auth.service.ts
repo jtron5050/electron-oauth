@@ -18,8 +18,16 @@ export class AuthService {
         
     }
 
+    get token() {
+        return this.oidc.getToken();
+    }
+
+    get userData$() {
+        return this.oidc.userData$;
+    }
+
     signin() {
-        return new Observable((subscriber) => {
+        return new Observable<boolean>((subscriber) => {
             const options = {
                 urlHandler: (url: string) => this.electron.shell.openExternal(url)
             };
@@ -29,11 +37,12 @@ export class AuthService {
             this.electron.ipcRenderer.once('signin-oidc', (event, args: { url: string }) => {
                 this.ngZone.run(() => {
                     console.log('[SIGNIN-OIDC] Received. args=', args);
-                    this.oidc.checkAuth(args.url).subscribe();
-                    subscriber.next(true);
-                    subscriber.complete();
+                    this.oidc.checkAuth(args.url).subscribe((isAuthorized) => {
+                        subscriber.next(isAuthorized);
+                        subscriber.complete();
+                    });
                 });
             });
-        }).pipe(switchMap(x => this.oidc.userData$))
+        });
     }
 }

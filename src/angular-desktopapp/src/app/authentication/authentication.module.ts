@@ -20,7 +20,7 @@ export function configureAuth(oidcConfigService: OidcConfigService) {
             clientId: 'desktopapp',
             scope: 'openid profile',
             responseType: 'code',
-            logLevel: LogLevel.Debug,
+            logLevel: LogLevel.Warn,
         });
 }
 

@@ -38,7 +38,7 @@ export class AppComponent {
     ngOnInit() {
         this.isAuthenticating$ = this.store.pipe(select(fromAuth.selectIsAuthenticating));
         this.isAuthenticated$ = this.store.pipe(select(fromAuth.selectIsAuthenticated));
-        this.userData$ = this.store.pipe(select(fromAuth.selectCurrentUser));
+        this.userData$ = this.store.pipe(select(fromAuth.selectProfile));
         this.store.dispatch(appStarted());
     }
 }
