@@ -42,11 +42,11 @@ namespace AuthServer
                 new Client
                 {
                     ClientId = "desktopapp",
-                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
-                    
+                    //ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
+                    RequireClientSecret = false,
                     AllowedGrantTypes = GrantTypes.Code,
-
-                    RedirectUris = { "x-desktopapp-oauth://signin-oidc" },
+                    AllowedCorsOrigins = { "http://localhost:4200" },
+                    RedirectUris = { "x-desktopapp-oauth://signin-oidc", "http://localhost:4200" },
                     PostLogoutRedirectUris = { "x-desktopapp-oauth://signout-callback-oidc" },
 
                     AllowOfflineAccess = true,

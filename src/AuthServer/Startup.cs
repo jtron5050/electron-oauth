@@ -67,6 +67,10 @@ namespace AuthServer
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(builder => {
+                builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+            });
+            
             app.UseStaticFiles();
 
             app.UseRouting();
