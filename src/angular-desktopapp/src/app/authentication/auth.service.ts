@@ -1,10 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Router } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { ElectronService } from 'ngx-electron';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-
 
 @Injectable({
     providedIn: 'root'
@@ -14,9 +11,7 @@ export class AuthService {
         private electron: ElectronService,
         private ngZone: NgZone,
         private oidc: OidcSecurityService
-    ) {
-
-    }
+    ) { }
 
     get token() {
         return this.oidc.getToken();
